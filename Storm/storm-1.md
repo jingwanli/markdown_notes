@@ -51,7 +51,7 @@ MapReduce   批量离线处理的计算框架
 
      \- "slave" 
 
-   - nimbus.host:“hadoop0"  //==注意:前面有空格!!!!==
+   - nimbus.host:“hadoop0"  //==注意:前面有空格!!!!== 
 
      nimbus.host:Storm集群Nimbus机器地址，负责资源分配和任务调度
 
@@ -59,8 +59,8 @@ MapReduce   批量离线处理的计算框架
 
 5.  将Storm安装文件复制到slave1 和 slave2节点
 
-   - scp-r apache-storm-0.9.3 slave1:~/ 
-   - scp-r ~/.bash_profile slave2:~/
+   - scp -r apache-storm-0.9.3 slave1:~/ 
+   - scp -r ~/.bash_profile slave2:~/
 
 6. 启动storm
 

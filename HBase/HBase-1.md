@@ -252,6 +252,8 @@ region分布在hregionserver
 
 4）在hregionserver当机后，负责失效的hregionserver上的regions迁移
 
+![](/hbsase-1.png)
+
 ####4.hregionserver
 
 主要负责响应用户的i/o请求，向hdfs中读写数据，==是hbase中最核心的模块==
@@ -310,7 +312,7 @@ RowKey 行键，类似于rdbms中的主键
 
 HBase的单元格是一个三维立体的，不再是平面的
 
-可以存储统一份数据的多个版本（时间戳）
+可以存储同一份数据的多个版本（时间戳）
 
 确定单元格的值？
 

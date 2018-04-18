@@ -14,7 +14,7 @@
 
 ​		0 1 * * * /usr/sbin/ntpdate cn.pool.ntp.org  自动时钟同步
 
-​		
+​		分钟   小时    天    月  周
 
 ​		/user/sbin/ntpdate cn.pool.ntp.org  手动时钟同步
 
@@ -90,7 +90,7 @@
 
 ​				私钥
 
-​			.bash_profile
+​			.bash_profile 查看公钥: 家目录下, .ssh
 
 ​		slave 
 

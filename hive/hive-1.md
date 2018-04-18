@@ -185,13 +185,13 @@ show tables in mydb;
 1. 管理表/内部表/临时表 归Hive管，在hive删除时，Hive 也会删除数据。
 2. 外部表
 
-		  create external table test5(id int,name string)
+     create external table test5(id int,name string)
 
-row format delimited
+     row format delimited
 
-fields terminated by ','
+     fields terminated by ','
 
-location '/data/stocks'; //注意：stocks也是目录！
+     location '/data/stocks'; //注意：stocks也是目录！
 
 3.分区表
 
@@ -257,9 +257,7 @@ set hive.exec.max.dynamic.partition.pernode =1000;//最大动态分区个数
 
 d).向分区表灌入数据
 
-灌数据方式2:insert overwrite table sogou.sogou_partition partition(year,month,day,hour)	
-
-​	 		  select * from sogou.sogou_ext; //overwrite 可以变成into
+==灌数据方式2:insert overwrite table sogou.sogou_partition partition(year,month,day,hour)	 select * from sogou.sogou_ext; //overwrite 可以变成into==
 
 本练习查询结果24个目录：/user/hive/warehouse/sogou.db/
 
@@ -281,7 +279,7 @@ comment 'Application name',session_id long comment
 
 'The current session id'); 
 
-灌数据方式3:create table时，定义location //若文件夹中有2个文件，则将数据全部显示
+==灌数据方式3:create table时，定义location //若文件夹中有2个文件，则将数据全部显示==
 
 当列数不同时，将从多的列数，截取建表时的字段。
 
@@ -289,7 +287,7 @@ comment 'Application name',session_id long comment
 
 //基准是表中字段。
 
-灌数据方式4:单个查询语句中创建表并加载数据 
+==灌数据方式4:单个查询语句中创建表并加载数据==
 
 create table sogou.sogou500w as select * from sogou.sogou_20111230
 
@@ -303,19 +301,18 @@ HiveQL查询
 
 案例
 
-\1. 查询次数大于2次的用户总数
+1. 查询次数大于2次的用户总数
 
 select count(a.uid) from(select uid,count(*) as cnt from sogou group by uid having cnt>2) a; 
 
 //子查询必须加别名！
 
-\2. join语句: inner join; left outer join; right outer join;
+2. join语句: inner join; left outer join; right outer join;
+3. order by: 对查询结果进行全局排序，既会有一个所有数据都通过一个reducer进行处理的过程。 
 
-3.order by: 对查询结果进行全局排序，既会有一个所有数据都通过一个reducer进行处理的过程。 
+​       对大数据集来说，可能会消耗漫长的时间来执行。   
 
-对大数据集来说，可能会消耗漫长的时间来执行。   
-
-   sort by: 只会在每个reducer中进行排序，既局部排序，每个reducer的输出是有序的(但并非全局有序)。
+​       sort by: 只会在每个reducer中进行排序，既局部排序，每个reducer的输出是有序的(但并非全局有序)。
 
 可以提高后面进行的全局排序的效率。
 
@@ -399,9 +396,7 @@ drop view 视图名
 
 搜索关键字长度大于256（不区分中英文），并且次数<3的UID
 
-select e.uid,count(*) as cnt  from (select * from sogou where length(keyword)>256) e group by e.uid
-
-having cnt<3;
+select e.uid,count(*) as cnt  from (select * from sogou where length(keyword)>256) e group by e.uid having cnt<3;
 
 create view sogou_view as select * from sogou where length(keyword)>256;
 
@@ -417,7 +412,7 @@ select * from sogou_view2 where url like '%ganji%';
 
 Rank<3的搜索中，多少用户的搜索次数>2
 
-select count(*) from (select e.uid,count(*) as cnt from (select * from sogou where rank <3) e group by uid having cnt>2) a;
+select count(\*) from (select e.uid,count(*) as cnt from (select * from sogou where rank <3) e group by uid having cnt>2) a;
 
 Tip:语句3：隐式的内连接，没有INNER JOIN，形成的中间表为两个表的笛卡尔积。//语句3,4的表述是相同的
 

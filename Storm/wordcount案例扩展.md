@@ -1,4 +1,4 @@
-÷工程中新建folder
+工程中新建folder
 
 复制mysql(驱动)—>粘贴到lib中—>build path
 
@@ -26,7 +26,7 @@
    private Connection conn;
    try{
        Class.forName(driver);
-       connection =     DriverManager.getConnection(url,username,password);
+       connection = DriverManager.getConnection(url,username,password);
    	
        
    }catch(Exception e){

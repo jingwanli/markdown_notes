@@ -73,11 +73,9 @@ ack(Object msgId)
 
 该方法确认已经处理了特定元组。
 
-### 
-
 ### fail
 
-**nextTuple**方法的签名如下- 
+nextTuple**方法的签名如下- 
 
 ```
 ack(Object msgId)
@@ -340,7 +338,7 @@ public class CallLogCounterBolt implements IRichBolt {
       Integer duration = tuple.getInteger(1);
 		
       if(!counterMap.containsKey(call)){
-         counterMap.put(call, 1);
+         counterMap.put(call, 1);                                                          
       }else{
          Integer c = counterMap.get(call) + 1;
          counterMap.put(call, c);
@@ -351,7 +349,7 @@ public class CallLogCounterBolt implements IRichBolt {
 
    @Override
    public void cleanup() {
-      for(Map.Entry<String, Integer> entry:counterMap.entrySet()){
+      for(Map.Entry<String, Integer> entry : counterMap.entrySet()){
          System.out.println(entry.getKey()+" : " + entry.getValue());
       }
    }

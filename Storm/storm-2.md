@@ -1,5 +1,5 @@
 ---
-typora-root-url: ../../Documents
+ typora-root-url: ../../Documents
 ---
 
 ## Storm进阶
@@ -219,5 +219,24 @@ Storm中: 有向无界的Tuple的序列
 
 ### Worker, Task.Executor三者的关系
 
-见ppt
+![](/img/屏幕快照 2018-04-09 上午10.10.34.png)
+
+- Worker是进程，Executor对应于线程，Spout或Bolt是一个个的Task；在Storm集群中的一个物理节点启动一个或者多个Worker进程，集群的Topology都是通过这些Worker进程运行的，Worker进程中又会运行一个或多个Executor线程，每个Executor线程只运行一个Topology的一个组件（Spout或Bolt）的Task任务，Task又是数据处理的实体单元。
+- 同一个Worker只执行同一个Topology相关的Task；在同一个Executor中可以执行多个同类型的Task，即在同一个Executor中，要么全部都是Bolt类的Task，要么全是Spout类的Task；在运行时，Spou和Bolt需要包装成一个又一个的Task。
+
+> Spout 和bolt
+
+从Topology的角度看(是相对的来看!)
+
+- Spout和bolt相当于两个进程.(通信是进程间的通信)
+
+  1个Spout可以对应多个Bolt(每次发的都是同一份数据!)
+
+  bolt里可以设置并发量,相当于不同线程.
+
+  Spout和bolt是一对多的关系!(一个bolt不可以处理多个Spout!)
+
+从worker的角度看
+
+- Spout和bolt分别相当于Worker的线程!( worker相当于容器!)
 
