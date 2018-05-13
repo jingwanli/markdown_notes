@@ -1264,3 +1264,127 @@ public class DeleteTest {
 
 #### 四、基于文件数据结构的SequenceFile 序列化文件
 
+lSequenceFile
+
+考虑日志文件，其中每一条日志记录是一行文本。如果想记录二进制类型，纯文本是不合适的。这种情况下，Hadoop的SequenceFile类非常合适，因为上述类提供了二进制键／值对的永久存储的数据结构。当作为日志文件的存储格式时，你可以自己选择键，比如由LongWritable类型表示的时间戳，以及值可以是Writable类型，用于表示日志记录的数量。
+
+SequenceFiles同样也可以作为小文件的容器。而HDFS和MapReduce是针对大文件进行优化的，所以通过SequenceFile类型将小文件包装起来，可以获得更高效率的存储和处理
+
+SequenceFile的写操作
+
+​     public classSequenceFileWriteDemo {
+
+  private static final String[]DATA={
+
+  "One,two,buckle myshoe",
+
+  "Three, four,shut thedoor",
+
+  "Five,six,pick upsticks",
+
+  "Seven,eight,lay themstright",
+
+  "Nine,ten, a big fathen"
+
+  };
+
+public static void main(String[] args) throws IOException {
+
+  String uri=args[0];
+
+  Configuration conf=newConfiguration();
+
+  FileSystemfs=FileSystem.get(URI.create(uri),conf);
+
+  Path path=new Path(uri);
+
+  IntWritable key=newIntWritable();
+
+  Text value=new Text();
+
+  SequenceFile.Writer writer=null;
+
+​                try{
+
+  writer=SequenceFile.createWriter(fs,conf, path, key.getClass(), value.getClass());
+
+​                                        for(int i=0;i<100;i++){
+
+  key.set(100-i);
+
+  value.set(DATA[i%DATA.length]);
+
+  System.out.printf("[%s]\t%s \t%s \n",                         writer.getLength(),key,value);
+
+  writer.append(key, value);
+
+  }
+
+  }finally{
+
+  IOUtils.closeStream(writer);
+
+  }
+
+  }
+
+}
+
+顺序文件中存储的键是从100到1降序排列的整数。表示为IntWritable对象。值为Text对象。在将每条记录追加到SequenceFile．Writer实例末尾之前，需要使用getLength()方法来获取文件访问的当前位置。
+
+读取SequenceFile
+
+public class SequenceFileReadDemo{
+
+  publicstatic void main(String[] args) throws IOException {
+
+  Stringuri=args[0];
+
+  Configurationconf=new Configuration();
+
+  FileSystemfs=FileSystem.get(URI.create(uri),conf);
+
+  Pathpath=new Path(uri);
+
+  SequenceFile.Readerreader=null;
+
+​                        try{
+
+  reader=newSequenceFile.Reader(fs,path,conf);
+
+Writablekey=(Writable) ReflectionUtils.newInstance(reader.getKeyClass(), conf);
+
+Writablevalue=(Writable)ReflectionUtils.newInstance(reader.getValueClass(),conf);
+
+  long position = reader.getPosition();
+
+  while(reader.next(key,value)){
+
+  String synSeen= reader.syncSeen()?"*" : "";
+
+  System.out.printf("[%s%s] \t%s \t%s\n", position,synSeen,key,value);
+
+  position=reader.getPosition();
+
+  }
+
+  }finally{
+
+  IOUtils.closeStream(reader);
+
+  }
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
